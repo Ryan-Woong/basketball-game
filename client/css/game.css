@@ -1,0 +1,74 @@
+        body {
+            background-color: #121212; color: #e0e0e0; font-family: 'Malgun Gothic', sans-serif;
+            margin: 0; padding: 20px; display: flex; justify-content: center;
+        }
+        #game-container {
+            width: 100%; max-width: 1400px; background-color: #1e1e1e;
+            padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); position: relative;
+        }
+        h1, h2, h3 { color: #64b5f6; text-align: center; }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #333; border-radius: 5px; background: #252525; }
+        .flex-container { display: flex; gap: 20px; }
+        .flex-child { flex: 1; }
+        button {
+            background-color: #1976d2; color: white; border: none; padding: 10px 15px;
+            margin: 5px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold;
+            transition: 0.2s;
+        }
+        button:hover { background-color: #1565c0; }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+        .action-btn { background-color: #2e7d32; width: calc(25% - 15px); min-width: 100px; }
+        .action-btn:hover { background-color: #1b5e20; }
+        .return-btn { background-color: #d32f2f; font-size: 16px; padding: 12px 30px; }
+        .return-btn:hover { background-color: #b71c1c; }
+        
+        #log-box {
+            background-color: #000; border: 1px solid #444; height: 520px;
+            overflow-y: auto; padding: 15px; font-family: Consolas, monospace;
+            line-height: 1.8; white-space: pre-wrap; font-size: 14.5px; margin-bottom: 10px;
+        }
+        .score-board { font-size: 28px; text-align: center; font-weight: bold; color: #ffb74d; margin-bottom: 15px; }
+        .hidden { display: none !important; }
+        
+        /* 텍스트 색상 클래스 */
+        .c-sys { color: #90caf9; }
+        .c-user { color: #81c784; }
+        .c-cpu { color: #e57373; }
+        .c-warn { color: #ffb74d; }
+        .c-succ { color: #ffd54f; font-weight: bold; }
+        .c-fail { color: #9e9e9e; }
+        .c-roll { color: #ce93d8; }
+        .c-crit { color: #f48fb1; font-weight: bold; text-shadow: 0 0 5px #e91e63; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; text-align: center; }
+        th, td { border: 1px solid #444; padding: 8px 5px; white-space: nowrap; }
+        th { background-color: #333; color: #64b5f6; }
+        
+        .modal {
+            position: absolute; top: 5%; left: 2%; width: 96%; max-height: 90%;
+            background: rgba(30,30,30,0.95); border: 2px solid #555; z-index: 1000;
+            padding: 20px; overflow-y: auto; overflow-x: auto; box-shadow: 0 0 20px #000; border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .stat-highlight { color: #ffb74d; font-weight: bold; }
+    
+        
+
+        /* ===== PvP additions ===== */
+        input[type=text] { background: #2a2a2a; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 10px 12px; font-size: 16px; }
+        .center { text-align: center; }
+        .field-row { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+        .notice { background: #263238; border: 1px solid #455a64; padding: 10px 15px; border-radius: 6px; font-size: 13px; margin: 10px 0; }
+        #conn-banner { text-align: center; font-size: 13px; margin: 4px 0 10px; min-height: 18px; }
+        #room-code { font-size: 44px; letter-spacing: 8px; color: #ffb74d; font-weight: bold; text-align: center; margin: 10px 0; }
+        .player-row { font-size: 18px; text-align: center; margin: 6px 0; }
+        .timer { text-align: center; font-size: 15px; color: #90caf9; margin: 6px 0; min-height: 20px; }
+        .timer.warn { color: #ef5350; font-weight: bold; }
+        .turn-banner { text-align: center; font-size: 18px; margin: 8px 0; }
+        .avail-btn { width: 100%; text-align: left; background: #333; margin: 3px 0; }
+        .avail-btn:hover { background: #444; }
+        #closed-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; border-radius: 8px; padding: 30px; text-align: center; }
+        #closed-screen.hidden { display: none !important; }
+        #closed-msg { font-size: 22px; line-height: 1.7; margin-bottom: 20px; }
+        #wait-panel { text-align: center; }

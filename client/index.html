@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>농구 TRPG 1:1 PvP</title>
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/court.css">
+</head>
+<body>
+<div id="game-container">
+<h1>🏀 농구 TRPG 1:1 PvP</h1>
+<div id="conn-banner">⏳ 서버에 연결하는 중... (무료 서버가 잠들어 있었다면 처음 한 번 최대 1분쯤 걸릴 수 있습니다)</div>
+
+<div id="attr-modal" class="modal hidden">
+    <h2>📋 팀 선수 능력치 (Attributes)</h2>
+    <div id="attr-content"></div>
+    <div class="center" style="margin-top: 20px;"><button onclick="closeModals()" style="padding: 10px 40px; background-color: #d32f2f;">닫기</button></div>
+</div>
+<div id="boxscore-modal" class="modal hidden">
+    <h2>📊 매치 기록지 (Box Score)</h2>
+    <div id="boxscore-content"></div>
+    <div class="center" style="margin-top: 20px;"><button onclick="closeModals()" style="padding: 10px 40px; background-color: #d32f2f;">닫기</button></div>
+</div>
+
+<div id="closed-screen" class="hidden">
+    <div id="closed-msg"></div>
+    <button class="return-btn" onclick="backToLobby()">처음으로</button>
+</div>
+
+<div id="lobby" class="section">
+    <div class="notice">
+        두 사람이 각자 접속해 1:1로 대전합니다. 한 명이 <b>방 만들기</b>로 5자리 코드를 만들어 상대에게 알려주면, 상대가 그 코드로 <b>참가</b>합니다.<br>
+        선택은 <b>1분 안에</b> 해야 하며 시간이 지나면 기권패입니다. 연결이 끊기면 경기가 종료되고 방이 삭제됩니다.<br>
+        같은 PC에서 둘이 테스트할 때는 한쪽을 <b>시크릿 창/다른 브라우저</b>로 여세요.
+    </div>
+    <div class="field-row">닉네임 <input type="text" id="nickname" maxlength="20" placeholder="닉네임" value="Player"></div>
+    <div class="field-row"><button id="btn-create" onclick="createRoom()" style="font-size: 18px; padding: 12px 30px;">방 만들기</button></div>
+    <div class="field-row">
+        방 코드 <input type="text" id="room-input" maxlength="5" placeholder="A7K3Q" style="width: 110px; text-transform: uppercase;">
+        <button id="btn-join" onclick="joinRoom()" style="font-size: 18px; padding: 12px 30px;">참가</button>
+    </div>
+    <div class="field-row"><button onclick="showGuide()" style="background-color: #00838f;">가이드 (룰 설명)</button></div>
+    <div id="lobby-msg" class="center c-warn"></div>
+</div>
+
+<div id="guide-screen" class="section hidden">
+    <h2>📜 게임 기초 룰 가이드</h2>
+    <div style="line-height: 1.8; font-size: 14px;">
+        <b>[드래프트 규칙]</b><br>
+        - 포지션별(PG, SG, SF, PF, C)로 무작위 스탯을 가진 선수가 4명씩 등장합니다.<br>
+        - 두 플레이어가 번갈아가며(방장이 먼저) 비어있는 포지션의 선수를 영입하여 5명의 로스터를 완성합니다.<br><br>
+
+        <b>[능력치(스탯) 및 행동 보너스]</b><br>
+        - 선수들은 각 행동에 관련된 11가지 세부 능력치를 가집니다. (5~20 범위)<br>
+        - <b>공격</b>: 3점슛, 미들슛, 레이업 / <b>수비</b>: 슛블락, 골밑블락, 대인수비 / <b>기회</b>: 힘, 볼핸들링, 패스, 오프볼, 리바운드<br>
+        - 스탯에 따라 주사위 굴림 시 더해지는 행동 보너스가 다릅니다:<br>
+          5~10 (+1) / 11~15 (+2) / 16~20 (+3) / 20초과 (+4)<br><br>
+
+        <b>[판정 진행 방식]</b><br>
+        - <b>대항 판정 (1d6)</b>: 공격자와 수비자가 각각 1d6 주사위를 굴려 보너스를 더해 겨룹니다. 최종값이 <b>높은 쪽이 승리</b>하며, 동점일 경우 <b>판정에 사용한 스탯이 높은 쪽이 승리</b>합니다. (6,6은 대성공 / 1,1은 대실패)<br>
+        - <b>성공 판정 (1d20)</b>: 대항 판정 승리 시 <b>내 스탯 100% 이하</b>, 패배 시 <b>50% 이하</b>가 나오면 성공합니다. (1은 대성공 / 20은 대실패)<br><br>
+
+        <b>[공격 전개 및 특수 시스템]</b><br>
+        - <b>돌파 / 페이크 무브 / 포스트업</b>: 돌파(볼핸들링) 후에는 미들슛/레이업, 페이크 무브(볼핸들링) 후에는 3점슛/미들슛, 포스트업(힘) 후에는 미들슛/골밑슛을 시도할 수 있습니다.<br>
+        - <b>헬프 수비(선택형)</b>: 수비측은 상대의 돌파나 포스트업이 성공했을 때 헬프 수비 지시가 가능합니다(페이크 무브는 헬프 불가). 헬프가 오면 해당 수비수로 블락을 시도하지만, 공격자가 패스를 선택하면 헬프 온 자리의 선수가 노마크 와이드 오픈이 됩니다.<br>
+        - <b>속공</b>: 턴오버(대실패) 또는 수비 대성공 스틸, 블락 발생 시 속공 1턴이 진행됩니다. 속공 마무리는 공을 가로챈 쪽이 선택합니다.<br>
+        - <b>패스 어드밴티지</b>: 최초 공격 시작 시 패스를 선택하면 주사위를 2번 굴려 하나라도 성공하면 인정됩니다.<br><br>
+
+        <b>[1:1 대전 규칙]</b><br>
+        - 공격 행동은 <b>공격권을 가진 쪽</b>이, 헬프 수비는 <b>수비 쪽</b>이 직접 선택합니다.<br>
+        - 모든 선택에는 <b>1분</b>의 제한 시간이 있으며, 시간이 지나면 <b>기권패</b>입니다. 연결이 끊기면 경기가 종료되고 방이 삭제됩니다.<br>
+    </div>
+    <div class="center" style="margin-top: 20px;"><button onclick="hideGuide()">로비로 돌아가기</button></div>
+</div>
+
+<div id="room-screen" class="section hidden">
+    <h2>대기실</h2>
+    <div class="center">방 코드 (상대에게 알려주세요)</div>
+    <div id="room-code"></div>
+    <div id="room-players"></div>
+    <div id="room-msg" class="center c-sys" style="margin: 14px 0;"></div>
+    <div class="center">
+        <button id="ready-btn" onclick="sendReady()" style="font-size: 18px; padding: 12px 40px;" disabled>READY</button>
+        <button class="return-btn" onclick="backToLobby()">나가기</button>
+    </div>
+</div>
+
+<div id="draft-screen" class="hidden">
+    <h2 class="c-sys">🏆 선수 드래프트</h2>
+    <div id="draft-turn" class="turn-banner"></div>
+    <div id="draft-timer" class="timer"></div>
+    <div class="flex-container">
+        <div class="flex-child section"><h3 class="c-user" id="my-roster-title">나의 팀 로스터</h3><div id="user-roster"></div></div>
+        <div class="flex-child section"><h3 class="c-cpu" id="opp-roster-title">상대 팀 로스터</h3><div id="cpu-roster"></div></div>
+    </div>
+    <div class="section"><h3>영입 가능한 선수 목록</h3><div id="available-players"></div></div>
+</div>
+
+<div id="sim-screen" class="hidden">
+    <div style="position: absolute; right: 20px; top: 20px; display:flex; gap:10px;">
+        <button onclick="showAttributes()" style="background-color: #2e7d32;">📋 선수 능력치</button>
+        <button onclick="showBoxScore()" style="background-color: #7b1fa2;">📊 경기 기록지</button>
+    </div>
+    <div class="score-board" id="score-board">0 : 0</div>
+    <div id="log-box"></div>
+    <div id="court-wrap">
+        <div id="court">
+            <div class="cl half"></div><div class="cl circ"></div>
+            <div class="cl paint pl-l"></div><div class="cl paint pl-r"></div>
+            <div class="cl arc a-l"></div><div class="cl arc a-r"></div>
+            <div class="hoop h-l"></div><div class="hoop h-r"></div>
+            <div id="ball">🏀</div>
+        </div>
+        <div id="court-status"></div>
+    </div>
+    <div id="action-panel" class="section hidden">
+        <h3 id="action-title" class="c-warn" style="margin-top: 0;"></h3>
+        <div id="action-timer" class="timer"></div>
+        <div id="action-buttons" class="center"></div>
+    </div>
+    <div id="wait-panel" class="section hidden">
+        <div id="wait-text" class="c-sys"></div>
+        <div id="wait-timer" class="timer"></div>
+    </div>
+    <div id="end-panel" class="section hidden center">
+        <h2 id="end-title" style="margin-top: 0;">경기 종료</h2>
+        <div id="end-note" class="c-warn" style="margin-bottom: 10px;"></div>
+        <button onclick="showBoxScore()" style="background-color: #7b1fa2;">📊 경기 기록지</button>
+        <button class="return-btn" onclick="backToLobby()">메인으로</button>
+    </div>
+</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/socket.js"></script>
+<script src="js/court-ui.js"></script>
+<script src="js/game-ui.js"></script>
+</body>
+</html>

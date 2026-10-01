@@ -1,0 +1,13 @@
+# Render Blueprint (선택 사항). 대시보드에서 수동으로 만들어도 같은 결과가 된다.
+# 무료 플랜 + 인스턴스 1개 고정. 게임 상태가 서버 메모리에 있으므로 인스턴스를 늘리면 안 된다.
+services:
+  - type: web
+    name: basketball-game
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "20"

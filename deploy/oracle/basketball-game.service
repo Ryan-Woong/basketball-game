@@ -1,0 +1,24 @@
+# systemd 서비스 파일 (Oracle Cloud Always Free VM / Ubuntu 용)
+# 설치: sudo cp basketball-game.service /etc/systemd/system/
+#       sudo systemctl daemon-reload && sudo systemctl enable --now basketball-game
+# 경로(WorkingDirectory)와 사용자(User)는 실제 환경에 맞게 고친다. Oracle Ubuntu 이미지의 기본 사용자는 보통 ubuntu 이다.
+[Unit]
+Description=Basketball PvP game server (Node.js + Socket.IO)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/basketball-game
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOST=0.0.0.0
+ExecStart=/usr/bin/node server.js
+# 비정상 종료 시 자동 재시작. (메모리 상태이므로 재시작하면 진행 중이던 방은 사라진다)
+Restart=always
+RestartSec=3
+# 인스턴스는 반드시 1개만 실행한다. 이 파일을 복제해서 여러 개 띄우지 말 것.
+
+[Install]
+WantedBy=multi-user.target

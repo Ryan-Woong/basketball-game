@@ -1,0 +1,32 @@
+{
+  "name": "basketball-game",
+  "version": "1.0.0",
+  "private": true,
+  "description": "16차/19차 농구 게임 규칙을 그대로 유지한 1:1 실시간 PvP 웹 게임",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node server/game-engine/test-engine.js && node server/game-engine/test-engine-pvp.js && node server/test-room-manager.js && node server/test-socket.js && node server/test-session.js && node server/test-security.js && node server/test-lifecycle.js && node server/test-client.js && node server/test-smoke-logic.js && node server/test-server-boot.js && node scripts/preflight.js",
+    "test:engine": "node server/game-engine/test-engine.js",
+    "test:room": "node server/test-room-manager.js",
+    "test:socket": "node server/test-socket.js",
+    "test:session": "node server/test-session.js",
+    "test:boot": "node server/test-server-boot.js",
+    "test:security": "node server/test-security.js",
+    "test:engine:pvp": "node server/game-engine/test-engine-pvp.js",
+    "test:lifecycle": "node server/test-lifecycle.js",
+    "test:client": "node server/test-client.js",
+    "test:smoke-logic": "node server/test-smoke-logic.js",
+    "preflight": "node scripts/preflight.js",
+    "smoke": "node scripts/smoke-pvp.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.7.5"
+  }
+}
